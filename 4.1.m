@@ -1,61 +1,44 @@
 %% myNatCubSpline: Natural Cubic Spline through x_i, y_i
 function [c] = myNatCubSpline(x,y)
+	
 	if not(length(x)==length(y))
 		error('x and y differ in length');
 	end
 	
-	n = length(x)-1;
-	c = zeros(n+1,4);
+	n = length(x)-1
+	c = zeros(n,4);
 	
-	for i = 0:n-1
-		c(1+i,4) = y(1+i);
+	if n == 1
+		c(1,1)=y(1);
+		c(1,2)=(y(2)-y(1))/(x(2)-x(1));
+		return;
 	end
+	if n == 2
+		error("not yet inplemented");
+		return;
+	end;
 
-	rechteseite = zeros(3*n,1);
-	@apos = @(i) 1+(i)*3;
-	@bpos = @(i) apos(i)+1;
-	@cpos = @(i) bpos(i)+1;
-	A=zeros(3*n);
-	z=1 ; % zeilenzaeler: welche gleichung schreiben wir gerade.
-	A(z,bpos(0))=1;
-	rechteseite(z)=0;
-	z=z+1;
-	for i = 0:n-1
-		dx=x(1+i+1)-x(1+i);
-		dx2=dx1*dx;
-		dx3=dx2*dx;
-		%Stetigkeit des Splines
-		A(z,apos(i))=dx3;
-		A(z,bpos(i))=dx2;
-		A(z,cpos(i))=dx;
-		rechteseite(z)=y(1+i+1);
-		z=z+1;
+	c(1:n,1+0) = y(1+0:1+n-1);
+	c
+	h=x(1+1:1+n) - x(1+0:1+n-1);
+	c
+	A=2*diag(h(1:n-1)+h(2:n));
+	A+=diag(h(2:n-1),-1);
+	A+=diag(h(2:n-1),+1);
+	
+	rechteseite = transpose(3*((y(1+2:1+n)   - y(1+1:1+n-1)) ./ h(2:n)- ...
+							 (y(1+1:1+n-1) - y(1+0:1+n-2)) ./ h(1:n-1)));
+	c(1:n-1, 1+2) = A\rechteseite;
+	c(n, 1+2) = 0;
 
-		%Stetigkeit der Ableitung
-		A(z,apos(i))=3*dx2;
-		A(z,bpos(i))=2*dx;
-		A(z,cpos(i))=1;
-		A(z,cpos(i+1))=-1;
-		rechteseite(z)=0;
-		z=z+1;
-
-		%Stetigk. d. 2. Abl.
-		A(z,apos(i))=6*dx;
-		A(z,bpos(i))=2;
-		A(z,bpos(i))=-2;
-		rechteseite(z)=0;
-		z=z+1;
-	end
-	A(z,apos(n-1))=6*(x(1+n)-x(1+n-1));
-	A(z,bpos(n-1))=2;
-	rechteseite(z)=0;
-	%Loesung trivial Uebung
-	loesung=A\rechteseite;
-	for i = 0:n-1
-		c(i,1)=loesung(apos(i));
-		c(i,2)=loesung(bpos(i));
-		c(i,3)=loesung(cpos(i));
-	end
+	c(1,1+3) = c(1,1+2)/3*h(1);
+	c
+	c(2:n,1+3) = transpose((c(2:n,1+2) - c(1:n-1, 1+2))) ./ (3*h(2:n));
+	c
+	c(1, 1+1) = (y(1+1)-y(1+0))/h(1) + h(1)/3*(2*c(1,1+2));
+	c
+	c(2:n, 1+1) = (y(1+2:1+n)-y(1+1:1+n-1))./h(2:n) + ...
+		h(2:n)/3*(2*c(2:n,1+2)+c(1:n-1,1+2));
 end
 
 % nicht fertig, da asymptotisch nicht wichtig, da gleichgungssystem
@@ -78,7 +61,81 @@ function [l,u]=binseach(haystack, needle)
 	end
 end
 
+function j=search(haystack, needle)
+	l=length(haystack);
+	if needle <= haystack(1);
+		j=1;
+	elseif needle >= haystack(l-1)
+		j=l-1;
+	else
+		for i=1:l-1
+			if(haystack(i)<=needle)
+				j=i;
+			end
+		end
+	end
+end
+
+
 %% myNatCubSplineEval: Evaluates myNatCubSpline
 function [y] = myNatCubSplineEval(x,c,z);
-
+	n=length(z);
+	y=zeros(n,1);
+	for i=1:n
+		zi=z(i);
+		j=search(x,zi);
+		dx=z(i)-x(j);
+		cj=c(j,:);
+		y(i)=((cj(4)*dx + cj(3))*dx + cj(2))*dx + cj(1);
+	end
 end
+
+function [s]=chebspace(howmany)
+	n=howmany-1;
+	s=zeros(1,howmany);
+	for i=0:howmany-1
+		s(1+i) = -cos(((2*i+1)*pi)/(2*n+2));
+	end
+end
+
+function myNatCubSplineTest()
+
+	runge = @(x)  (1 + 25*x .^ 2).^(-1);
+
+	ns = [7,12,17];
+	for i=1:length(ns)
+		n=ns(i);
+		px = linspace(-1,1,1000);
+		
+		aex=linspace(-1,1,n+1);
+		aey = runge(aex);
+		aec=myNatCubSpline(aex,aey);
+		paey = myNatCubSplineEval(aex,aec, px);
+		
+		cx=chebspace(n+1);
+		cy=runge(cx);
+		cc = myNatCubSpline(cx,cy);
+		pcy=myNatCubSplineEval(cx,cc,px);
+		
+		figure(i);
+		hold;
+		
+		plot(px, runge(px), 'g');
+		plot(aex,aey, 'r*', 'markersize', 10);
+		plot(px,paey, 'r');
+		plot(cx,cy, 'b*', 'markersize', 10);
+		plot(px,pcy, 'b');
+		print(sprintf('NI-%d.fig', n));
+		replot;
+		diffx = linspace(-1,1,101);
+		diffr = runge(diffx);
+		diffaey = myNatCubSplineEval(aex,aec, diffx);
+		diffcy = myNatCubSplineEval(cx,cc, diffx);
+		n
+		printf("Maximale Abweichung bei Aequidistanten Knoten: %f\n", ...
+				max(diffx-diffaey));
+		printf("Maximale Abweichung bei Chebycheffknoten: %f\n", ...
+				max(diffx-diffcy));
+	end
+end
+
