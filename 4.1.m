@@ -13,30 +13,30 @@ function [c] = myNatCubSpline(x,y)
 		c(1,2)=(y(2)-y(1))/(x(2)-x(1));
 		return;
 	end
-	if n == 2
-		error("not yet inplemented");
-		return;
-	end;
 
 	c(1:n,1+0) = y(1+0:1+n-1);
-	c
 	h=x(1+1:1+n) - x(1+0:1+n-1);
-	c
-	A=2*diag(h(1:n-1)+h(2:n));
-	A+=diag(h(2:n-1),-1);
-	A+=diag(h(2:n-1),+1);
-	
+	h
+	if n == 2
+		A=2*(h(1)+h(2));
+	else
+		A=2*diag(h(1:n-1)+h(2:n));
+		A+=diag(h(2:n-1),-1);
+		A+=diag(h(2:n-1),+1);
+	end
+	A
+
 	rechteseite = transpose(3*((y(1+2:1+n)   - y(1+1:1+n-1)) ./ h(2:n)- ...
 							 (y(1+1:1+n-1) - y(1+0:1+n-2)) ./ h(1:n-1)));
+	
+	rechteseite
+
 	c(1:n-1, 1+2) = A\rechteseite;
 	c(n, 1+2) = 0;
 
 	c(1,1+3) = c(1,1+2)/3*h(1);
-	c
 	c(2:n,1+3) = transpose((c(2:n,1+2) - c(1:n-1, 1+2))) ./ (3*h(2:n));
-	c
 	c(1, 1+1) = (y(1+1)-y(1+0))/h(1) + h(1)/3*(2*c(1,1+2));
-	c
 	c(2:n, 1+1) = (y(1+2:1+n)-y(1+1:1+n-1))./h(2:n) + ...
 		h(2:n)/3*(2*c(2:n,1+2)+c(1:n-1,1+2));
 end
