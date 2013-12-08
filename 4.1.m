@@ -1,11 +1,12 @@
 %% myNatCubSpline: Natural Cubic Spline through x_i, y_i
 function [c] = myNatCubSpline(x,y)
-	
+	x=reshape(x,length(x),1);
+	y=reshape(y,length(y),1);
 	if not(length(x)==length(y))
 		error('x and y differ in length');
 	end
 	
-	n = length(x)-1
+	n = length(x)-1;
 	c = zeros(n,4);
 	
 	if n == 1
@@ -16,7 +17,6 @@ function [c] = myNatCubSpline(x,y)
 
 	c(1:n,1+0) = y(1+0:1+n-1);
 	h=x(1+1:1+n) - x(1+0:1+n-1);
-	h
 	if n == 2
 		A=2*(h(1)+h(2));
 	else
@@ -24,21 +24,25 @@ function [c] = myNatCubSpline(x,y)
 		A+=diag(h(2:n-1),-1);
 		A+=diag(h(2:n-1),+1);
 	end
-	A
 
-	rechteseite = transpose(3*((y(1+2:1+n)   - y(1+1:1+n-1)) ./ h(2:n)- ...
-							 (y(1+1:1+n-1) - y(1+0:1+n-2)) ./ h(1:n-1)));
+	rechteseite = 3*((y(1+2:1+n)   - y(1+1:1+n-1)) ./ h(2:n)- ...
+					(y(1+1:1+n-1) - y(1+0:1+n-2)) ./ h(1:n-1));
 	
-	rechteseite
 
-	c(1:n-1, 1+2) = A\rechteseite;
-	c(n, 1+2) = 0;
+	loesung=zeros(n+1, 1); % 1 groesser, damit man spaeter keinen randfall hat.
+	loesung(2:n) = A\rechteseite;
+	c(1:n, 1+2) = loesung(1:n);
 
-	c(1,1+3) = c(1,1+2)/3*h(1);
-	c(2:n,1+3) = transpose((c(2:n,1+2) - c(1:n-1, 1+2))) ./ (3*h(2:n));
-	c(1, 1+1) = (y(1+1)-y(1+0))/h(1) + h(1)/3*(2*c(1,1+2));
-	c(2:n, 1+1) = (y(1+2:1+n)-y(1+1:1+n-1))./h(2:n) + ...
-		h(2:n)/3*(2*c(2:n,1+2)+c(1:n-1,1+2));
+	% Die Richtige Vairante so wie gnuplot es macht :)
+	c(:, 1+1) = (y(2:n+1)-y(1:n))./h - h/3 .* (loesung(2:n+1)+2*loesung(1:n));
+	c(:, 1+3) = (loesung(2:n+1) - loesung(1:n)) ./ (3*h);
+
+	% Die falsche Variante aus dem Skript :)
+	%c(1,1+3) = c(1,1+2)/3*h(1);
+	%c(2:n,1+3) = transpose((c(2:n,1+2) - c(1:n-1, 1+2))) ./ (3*h(2:n));
+	%c(1, 1+1) = (y(1+1)-y(1+0))/h(1) + h(1)/3*(2*c(1,1+2));
+	%c(2:n, 1+1) = (y(1+2:1+n)-y(1+1:1+n-1))./h(2:n) + ...
+	%	h(2:n)/3*(2*c(2:n,1+2)+c(1:n-1,1+2));
 end
 
 % nicht fertig, da asymptotisch nicht wichtig, da gleichgungssystem
@@ -105,14 +109,14 @@ function myNatCubSplineTest()
 	ns = [7,12,17];
 	for i=1:length(ns)
 		n=ns(i);
-		px = linspace(-1,1,1000);
+		px = linspace(-1,1,1000)';
 		
-		aex=linspace(-1,1,n+1);
+		aex=linspace(-1,1,n+1)';
 		aey = runge(aex);
 		aec=myNatCubSpline(aex,aey);
 		paey = myNatCubSplineEval(aex,aec, px);
 		
-		cx=chebspace(n+1);
+		cx=chebspace(n+1)';
 		cy=runge(cx);
 		cc = myNatCubSpline(cx,cy);
 		pcy=myNatCubSplineEval(cx,cc,px);
@@ -127,7 +131,7 @@ function myNatCubSplineTest()
 		plot(px,pcy, 'b');
 		print(sprintf('NI-%d.fig', n));
 		replot;
-		diffx = linspace(-1,1,101);
+		diffx = linspace(-1,1,101)';
 		diffr = runge(diffx);
 		diffaey = myNatCubSplineEval(aex,aec, diffx);
 		diffcy = myNatCubSplineEval(cx,cc, diffx);
