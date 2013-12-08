@@ -4,13 +4,14 @@ P7a = @(x) x.^7 - 7.*x.^6 + 21.*x.^5 - 35 .* x.^4 + 35 .* x.^3 - 21 .* x.^2 +  7
 P7b = @(x) (x-1).^7
 P7c = @(x) ((((((x - 7).*x + 21).*x - 35).*x + 35).*x - 21).*x+7).*x - 1
 
-x=single([0.8:5e-5:1.2]);
+x=single([0.8:5e-5:1.2]); % Single fuer ungenaues rechnen
 genau=P7b([0.8:5e-5:1.2]);
 
 subplot(2,2,1);
 y=P7a(x);
 plot(x, y); %Wie zu erwarten viel Ausloeschung; immer +- abwechselnd
-delta1 = sqrt(sum((genau-y).^2));
+% euclidischer abstand zur "genauen" loesung:
+delta1 = sqrt(sum((genau-y).^2)); 
 title('monomsarstellung');
 
 subplot(2,2,2);
@@ -26,9 +27,6 @@ delta3 = sqrt(sum((genau-y).^2));
 title('horner');
 
 subplot(2,2,4);
-bar([delta1, delta2, delta3]);
+bar([delta1 , delta3]);
 title('Abweichung');
 
-puts('--- Return to close. ---\n');
-P8(4)
-pause();

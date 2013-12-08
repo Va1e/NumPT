@@ -69,8 +69,10 @@ function myNewtonInterpolTest()
 		plot(px,paey, 'r');
 		plot(cx,cy, 'b*', 'markersize', 10);
 		plot(px,pcy, 'b');
-		print(sprintf('NI-%d.fig', n));
+		%print & replot ist wie saveas in matlab.
+		print(sprintf('NI-%d.fig', n)); % fig ist xfig, nicht matlab fig.
 		replot;
+		
 		diffx = linspace(-1,1,101);
 		diffr = runge(diffx);
 		diffaey = myNewtonInterpolHorner(aex,aec, diffx);
