@@ -1,7 +1,7 @@
 %Blatt 1, Aufgabe 1
 format long
 %n=[3:3:30];
-x=-5.5;
+x=-5.5
 naeherung1 = naeherung2 = 0;
 
 wert_vom_blatt = 0.0040867714
@@ -39,7 +39,7 @@ puts("c)\n");
 for n=3:3:30
 	e=1;
 	for k=1:n
-		s=((-x)^k)/factorial(k);
+		s=((x/11)^k)/factorial(k);
 		e=e+s;
 	end
 	n
