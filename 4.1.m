@@ -140,10 +140,12 @@ function myNatCubSplineTest()
 		diffaey = myNatCubSplineEval(aex,aec, diffx);
 		diffcy = myNatCubSplineEval(cx,cc, diffx);
 		n
-		[M,iM]=max(abs(diffx-diffaey));
+		[M,iM]=max(abs(diffr-diffaey));
 		printf("Maximale Abweichung bei Aequidistanten Knoten: %f\n", M);
 		printf("bei: %f\n", diffx(iM));
-		[m,im]=max(abs(diffx-diffcy));
+		%%diffcy(iM)
+		%%runge(diffx(iM))
+		[m,im]=max(abs(diffr-diffcy));
 		printf("Maximale Abweichung bei Chebycheffknoten: %f\n", m);
 		printf("bei: %f\n", diffx(im));
 	end
