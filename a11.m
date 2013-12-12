@@ -11,7 +11,6 @@ naeherung1 = 0;
 naeherung2 = 0;
 naeherung3 = 0;
 wert_vom_blatt = 0.0040867714
-wert_aus_octave=exp(-5.5)
 
 disp('a)');
 
@@ -21,10 +20,11 @@ for n=3:3:30
 		s=(x^k)/(factorial(k));
 		e=e+s;
 	end
-	naeherung1 = e
+    n
+    naeherung1 = e
 end
 
-absolut_1 = (naeherung1 - wert_aus_octave)
+absolut_1 = (naeherung1 - wert_vom_blatt)
 relativ_1 = absolut_1/wert_vom_blatt
 
 disp("b)");
@@ -34,11 +34,12 @@ for n=3:3:30
 		s=((-x)^k)/factorial(k);
 		e=e+s;
 	end
+    n
 	naeherung2 = 1/e
 end
 disp('');
 
-absolut_2 = (naeherung2 - wert_aus_octave)
+absolut_2 = (naeherung2 - wert_vom_blatt)
 relativ_2 = absolut_2/wert_vom_blatt
 
 for n=3:3:30
@@ -47,10 +48,11 @@ for n=3:3:30
 		s=((-x2)^k)/factorial(k);
 		e=(e+s);
 	end
+    n
 	naeherung3 = (1/e)^11
 end
 disp('');
 
-absolut_3 = (naeherung3 - wert_aus_octave)
+absolut_3 = (naeherung3 - wert_vom_blatt)
 relativ_3 = absolut_3/wert_vom_blatt
 
