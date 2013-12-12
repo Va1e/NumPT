@@ -41,7 +41,7 @@ disp('');
 
 absolut_2 = (naeherung2 - wert_vom_blatt)
 relativ_2 = absolut_2/wert_vom_blatt
-
+disp('')
 for n=3:3:30
 	e=1;
 	for k=1:n
