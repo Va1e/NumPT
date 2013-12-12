@@ -79,9 +79,9 @@ function myNewtonInterpolTest()
 		diffcy = myNewtonInterpolHorner(cx,cc, diffx);
 		n
 		printf("Maximale Abweichung bei Aequidistanten Knoten: %f\n", ...
-				max(diffx-diffaey));
+				max(abs(diffx-diffaey)));
 		printf("Maximale Abweichung bei Chebycheffknoten: %f\n", ...
-				max(diffx-diffcy));
+				max(abs(diffx-diffcy)));
 	end
 end
 
