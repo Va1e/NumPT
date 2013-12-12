@@ -1,4 +1,5 @@
 %% myNatCubSpline: Natural Cubic Spline through x_i, y_i
+%% the x-values must be sorted.
 function [c] = myNatCubSpline(x,y)
 	x=reshape(x,length(x),1);
 	y=reshape(y,length(y),1);
@@ -80,8 +81,9 @@ function j=search(haystack, needle)
 	end
 end
 
-
 %% myNatCubSplineEval: Evaluates myNatCubSpline
+% x ist das gleiche wie in myNatCubSpline, c dessen ergebnis.
+% auswertung geschieht an jeder komponente von z.
 function [y] = myNatCubSplineEval(x,c,z);
 	n=length(z);
 	y=zeros(n,1);
@@ -102,6 +104,7 @@ function [s]=chebspace(howmany)
 	end
 end
 
+% Analog zu Aufgabe 2.1, nur mit spaltenvectoren fuer myNatCubSpline.
 function myNatCubSplineTest()
 
 	runge = @(x)  (1 + 25*x .^ 2).^(-1);
@@ -122,6 +125,7 @@ function myNatCubSplineTest()
 		pcy=myNatCubSplineEval(cx,cc,px);
 		
 		figure(i);
+		title(sprintf('n = %d', n));
 		hold;
 		
 		plot(px, runge(px), 'g');
@@ -136,10 +140,12 @@ function myNatCubSplineTest()
 		diffaey = myNatCubSplineEval(aex,aec, diffx);
 		diffcy = myNatCubSplineEval(cx,cc, diffx);
 		n
-		printf("Maximale Abweichung bei Aequidistanten Knoten: %f\n", ...
-				max(diffx-diffaey));
-		printf("Maximale Abweichung bei Chebycheffknoten: %f\n", ...
-				max(diffx-diffcy));
+		[M,iM]=max(abs(diffx-diffaey));
+		printf("Maximale Abweichung bei Aequidistanten Knoten: %f\n", M);
+		printf("bei: %f\n", diffx(iM));
+		[m,im]=max(abs(diffx-diffcy));
+		printf("Maximale Abweichung bei Chebycheffknoten: %f\n", m);
+		printf("bei: %f\n", diffx(im));
 	end
 end
 
