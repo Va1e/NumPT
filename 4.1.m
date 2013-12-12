@@ -133,7 +133,7 @@ function myNatCubSplineTest()
 		plot(px,paey, 'r');
 		plot(cx,cy, 'b*', 'markersize', 10);
 		plot(px,pcy, 'b');
-		print(sprintf('NI-%d.fig', n));
+		print(sprintf('SI-%d.fig', n));
 		replot;
 		diffx = linspace(-1,1,101)';
 		diffr = runge(diffx);
