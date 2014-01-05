@@ -1,4 +1,4 @@
-format long
+%format long
 
 g=[2;2.5;2.33;1.98];
 function [c] = DFT(f)
@@ -12,7 +12,7 @@ function [c] = DFT(f)
 	  be=m*f(k);
 	  for l=0:1:length(f);
 	    zu=m*f(l+1)*exp(-i*l*x(k));
-	    be=be+zu
+	    be=be+zu;
 	  end
 	  c(k)=be;
 	end
