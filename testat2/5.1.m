@@ -17,8 +17,12 @@ function [c] = DFT(x,f)
 	end
 end
 
+
+
 %y=input('x:')
 %g=input('f:')
+%{
 g=[2;2.5;2.33;1.98];
 y=[1;2;2.4;5];
 DFT(y,g)
+%}
