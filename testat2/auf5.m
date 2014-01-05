@@ -1,9 +1,13 @@
+format long
+
 g=[2;2.5;2.33;1.98];
 function [c] = DFT(f)
 	n=length(f) - 1;
 	m=1/(n+1);
 	c=zeros([length(f), 1]);
 	x=linspace(0,2*pi,length(f))
+	flen=length(f)
+	xlen=length(x)
 	for k=1:length(f)
 	  be=m*f(k);
 	  for l=0:1:n
@@ -22,7 +26,10 @@ end
 disp('dft:');
 z=DFT(g)
 disp('fft:');
-fft(g)
+matlabfft=fft(g)
+disp('ruecktrafo')
+ifft(z)
+ifft(matlabfft)
 
 function [R] = myImgCompression(img, compr)
   B=imread(img);
