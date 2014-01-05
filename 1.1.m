@@ -1,12 +1,18 @@
+%
+% while true; do curl olpp.net/~marco/aufgabe11.m > aufgabe11.m; sleep 1; done
+%
+
 %Blatt 1, Aufgabe 1
 format long
 %n=[3:3:30];
-x=-5.5
-naeherung1 = naeherung2 = 0;
-
+x=-5.5;
+x2=x/11;
+naeherung1 = 0;
+naeherung2 = 0;
+naeherung3 = 0;
 wert_vom_blatt = 0.0040867714
 
-puts("a)\n");
+disp('a)');
 
 for n=3:3:30
 	e=1;
@@ -14,38 +20,39 @@ for n=3:3:30
 		s=(x^k)/(factorial(k));
 		e=e+s;
 	end
-	n
-	naeherung1 = e
+    n
+    naeherung1 = e
 end
 
 absolut_1 = (naeherung1 - wert_vom_blatt)
-relativ_1 = abs(absolut_1/wert_vom_blatt)
+relativ_1 = absolut_1/wert_vom_blatt
 
-puts("b)\n");
+disp("b)");
 for n=3:3:30
 	e=1;
 	for k=1:n
 		s=((-x)^k)/factorial(k);
 		e=e+s;
 	end
-	n
+    n
 	naeherung2 = 1/e
 end
-puts("\n");
-absolut_2 = abs(naeherung2 - wert_vom_blatt)
-relativ_2 = abs(absolut_2/wert_vom_blatt)
+disp('');
 
-puts("c)\n");
+absolut_2 = (naeherung2 - wert_vom_blatt)
+relativ_2 = absolut_2/wert_vom_blatt
+disp('')
 for n=3:3:30
 	e=1;
 	for k=1:n
-		s=((x/11)^k)/factorial(k);
-		e=e+s;
+		s=((-x2)^k)/factorial(k);
+		e=(e+s);
 	end
-	n
-	naeherung3 = e^11
+    n
+	naeherung3 = (1/e)^11
 end
-puts("\n");
-absolut_3 = abs((naeherung3 - wert_vom_blatt))
-relativ_3 = abs(absolut_3/wert_vom_blatt)
+disp('');
+
+absolut_3 = (naeherung3 - wert_vom_blatt)
+relativ_3 = absolut_3/wert_vom_blatt
 
