@@ -4,10 +4,8 @@ function [c] = DFT(f)
 	m=1/(n+1);
 	c=zeros([length(f), 1]);
 	x=linspace(0,2*pi,length(f))
-%	x=x';
 	for k=1:length(f)
 	  be=m*f(k);
-%	  zw=be;
 	  for l=0:1:n
 	    zu=m*f(l+1)*exp(-i*l*x(k));
 	    be=be+zu;
@@ -22,7 +20,7 @@ end
 %g=input('f:')
 
 disp('dft:');
-DFT(g)
+z=DFT(g)
 disp('fft:');
 fft(g)
 
