@@ -1,12 +1,9 @@
-function [c] = DFT(x,f)
-	if length(x)!=length(f)
-	   error('x and f(x) differ in length');
-	end
-	n=length(x) - 1;
+function [c] = DFT(f)
+	n=length(f) - 1;
 	m=1/(n+1);
-	c=zeros([length(x), 1]);
-
-	for k=1:length(x)
+	c=zeros([length(f), 1]);
+	x=linspace(0,2*pi,length(f))
+	for k=1:length(f)
 	  be=m*f(k);
 %	  zw=be;
 	  for l=0:1:n
@@ -24,5 +21,11 @@ end
 %{
 g=[2;2.5;2.33;1.98];
 y=[1;2;2.4;5];
-DFT(y,g)
+DFT(g)
 %}
+
+function [R] = myImgCompression(img, compr)
+  B=imread(img);
+  
+  %  image(B)
+end
