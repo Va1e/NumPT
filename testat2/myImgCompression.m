@@ -1,4 +1,5 @@
 function myImgCompression(infile, compr, outfile)
+	%optionaler Dateiname für Ausgabe
 	if nargin == 2
 		outfile=infile;
 	end
@@ -7,6 +8,7 @@ function myImgCompression(infile, compr, outfile)
 	ncs = dims(3);
 	width = dims(2);
 	height = dims(1);
+	
 	for c = 1:ncs
 		for y = 1:height
 			transformed = fft(double(B(y,:,c)));
