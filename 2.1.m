@@ -86,4 +86,4 @@ function myNewtonInterpolTest()
 				max(abs(diffr-diffcy)));
 	end
 end
-
+myNewtonInterpolTest()
