@@ -46,8 +46,7 @@ function [c] = myNatCubSpline(x,y)
 	%	h(2:n)/3*(2*c(2:n,1+2)+c(1:n-1,1+2));
 end
 
-% nicht fertig, da asymptotisch nicht wichtig, da gleichgungssystem
-% loesen mehr zeit braucht bei wenigen z, und bei vielen z  ungefaehr |x| = log |x| :) 
+% binsearch nicht fertig. benutze sinnfreie lineare suche.
 function [l,u]=binseach(haystack, needle)
 	li=1;
 	ui=length(haystack);
@@ -66,6 +65,9 @@ function [l,u]=binseach(haystack, needle)
 	end
 end
 
+
+%suche den index des iterpolationspolynoms, das verwended
+% werden soll fuer stuetzstellen haystack und auswertung bei needle
 function j=search(haystack, needle)
 	l=length(haystack);
 	if needle <= haystack(1);
@@ -92,7 +94,7 @@ function [y] = myNatCubSplineEval(x,c,z);
 		j=search(x,zi);
 		dx=z(i)-x(j);
 		cj=c(j,:);
-		y(i)=((cj(4)*dx + cj(3))*dx + cj(2))*dx + cj(1);
+		y(i)=((cj(4)*dx + cj(3))*dx + cj(2))*dx + cj(1); %horner
 	end
 end
 
