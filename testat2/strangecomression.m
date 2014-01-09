@@ -15,14 +15,16 @@ function [R] = myImgCompression(img, compr, imgout)
 			[sor,ind]=sort(Z);
 			%s,i=sort(e)
 			%e(i)
-			for x=2:2:round(length(ind)*compress)
+			for x=2:2:round(length(ind)*compress*2)
 				Z(x)=0;
 			end
 			zuncompr=ifft(Z);
-			B(y,:,c)=zuncompr;
+			B(y,:,c)=real(zuncompr);
 		end
 	end
 	imwrite(B,imgout)
 end
 
-myImgCompression("logo.png",30,"logocomp.bmp")
+for index=0:10:100
+	myImgCompression("cat.bmp",index,[sprintf("catcomp%2d.bmp", index)])
+end
