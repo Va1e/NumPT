@@ -7,11 +7,7 @@ function [R] = myImgCompression(img, compr, imgout)
 	B=imread(img);
 	s=size(B);
 	%Fall von 2D Matrizen/SW-Bildern wird abgedeckt
-	if size(s)=2
-		colors=1
-	else
-		colors=s(3)
-	end
+	colors=size(B,3),
 	for c=1:colors
 		for y=1:1:s(1)
 			transformed=fft(double(B(y,:,c)));
@@ -19,12 +15,9 @@ function [R] = myImgCompression(img, compr, imgout)
 			for x=1:round(length(ind)*compress)
 				transformed(ind(x))=0;
 			end
-			zuncompr=real(ifft(transformed));
-			B(y,:,c)=zuncompr;
+			uncompr=real(ifft(transformed));
+			B(y,:,c)=uncompr;
 		end
 	end
 	imwrite(B,imgout)
-end
-for index=10:10:90
-	myImgCompression("Untitled.bmp",index,[sprintf("zebracomp%.3d.jpg", index)])
 end

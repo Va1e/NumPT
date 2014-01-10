@@ -1,0 +1,2 @@
+T=sin(20*)
+U=iDFT(DFT(T))
