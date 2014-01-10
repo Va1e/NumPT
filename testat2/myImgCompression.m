@@ -5,16 +5,16 @@ function myImgCompression(infile, compr, outfile)
 	end
 	B=imread(infile);
 	dims = size(B);
-	ncs = dims(3);
 	width = dims(2);
 	height = dims(1);
+	ncs = size(B,3); % wenn nur ein farbkanal vorhanden ist, bekommt man
+		% so die 1. dims(3) ist dann ein indexfehler.
 	
 	for c = 1:ncs
-		for y = 1:height
+		for y = 1:height % zeilenweise transformieren
 			transformed = fft(double(B(y,:,c)));
 			[sorted, permutation] = sort(abs(transformed)); % sorted is unused
 			nnuller = max(min(width, round(double(compr)/100 * width)), 0);
-			
 
 			%for i= 1 : endindex
 			%	transformed(1,permutation(i)) = 0;
