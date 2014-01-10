@@ -12,7 +12,7 @@ function [R] = myImgCompression(img, compr, imgout)
 	else
 		colors=s(3)
 	end
-	for c=1:1:colors
+	for c=1:colors
 		for y=1:1:s(1)
 			transformed=fft(double(B(y,:,c)));
 			[sor,ind]=sort(abs(transformed));
@@ -26,5 +26,5 @@ function [R] = myImgCompression(img, compr, imgout)
 	imwrite(B,imgout)
 end
 for index=10:10:90
-	myImgCompression("zebra.bmp",index,[sprintf("zebracomp%.3d.jpg", index)])
+	myImgCompression("Untitled.bmp",index,[sprintf("zebracomp%.3d.jpg", index)])
 end
